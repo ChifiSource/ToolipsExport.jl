@@ -1,2 +1,1 @@
-# ToolipsExports.jl
-Export toolips apps to executables and mobile apps !
+This module allows you to compile toolips apps into shared libraries, executables, and mobile apps to be ran natively (**yes, this is real**), as of right now the project is currently a **work in progress**, though compiling to a shared library does work! The part of this module that is still in the works is the export templates, which are to wrap the shared library into native projects, or compile an executable server, or application with Blink.jl.
