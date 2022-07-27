@@ -1,6 +1,4 @@
 module ToolipsExport
-using Toolips
-using Blink
 using PackageCompiler
 using TOML
 using Pkg
@@ -13,6 +11,7 @@ mutable struct ExportTemplate{type} end
 
 const so = ExportTemplate{:so}()
 const app = ExportTemplate{:app}()
+const server = ExportTemplate{:server}()
 const android = ExportTemplate{:android}()
 
 function build_copy()
@@ -65,16 +64,24 @@ function build(et::ExportTemplate{:app})
     name = build_copy()
     Pkg.activate(".")
     Pkg.add("Blink")
-    open("src/$name.jl", "a") do io
-        write(io, """
-        using Blink
-        using $name
-        function julia_main()::Cint
-            $name.start("127.0.0.1", 5576)
-            w = Window()
-            loadurl(w, "http://127.0.0.1:5576")
-            return 0
-        end""")
+    current_file::String = read("src/$name.jl", String)
+    lastend::UnitRange{Int64, Int64} = findlast("end", current_file)[1]
+    current_file[lastend] = ""
+    current_file = current_file * """\n
+    using Blink
+    using $name
+    function julia_main()::Cint
+        $name.start("127.0.0.1", 8003)
+        w = Window()
+        loadurl(w, "http://127.0.0.1:8003")
+        while 5 == 5
+
+        end
+        return 0
+    end
+end # - module"""
+    open("src/$name.jl", "w") do io
+        write(io, current_file)
     end
     create_app(".", "$(name)app")
     touch("$(name)app/share/julia/cert.pem")
