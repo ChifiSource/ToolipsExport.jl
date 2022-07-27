@@ -68,16 +68,14 @@ function build(et::ExportTemplate{:app})
     lastend::UnitRange{Int64} = findlast("end", current_file)
     current_file = current_file[1:minimum(lastend) - 1] * """\n
     using Blink
-    using $name
     function julia_main()::Cint
-        $name.start("127.0.0.1", 8003)
+        start("127.0.0.1", 8003)
         w = Window()
         loadurl(w, "http://127.0.0.1:8003")
-        Base.Threads.@spawn while active(w)
-            if ~(active(w))
-                return(0)
-            end
+        while active(w)
+
         end
+        return(0)
     end
 end # - module"""
     open("src/$name.jl", "w") do io
