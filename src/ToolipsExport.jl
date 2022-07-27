@@ -4,31 +4,36 @@ using Blink
 using PackageCompiler
 using TOML
 using Pkg
+
 macro L_str(s::String)
     s
 end
-abstract type ExportTemplate end
 
-mutable struct So <: ExportTemplate
+mutable struct ExportTemplate{type} end
 
-end
+const so = ExportTemplate{:so}()
+const app = ExportTemplate{:app}()
+const android = ExportTemplate{:android}()
 
-function build(et::ExportTemplate = So())
+function build_copy()
     name = TOML.parse(read("Project.toml", String))["name"]
     if ~(isdir(name))
         Pkg.generate(name)
-    else
-
     end
     cp("src", "$name/src", force = true)
     cp("Project.toml", "$name/Project.toml", force = true)
     cp("Manifest.toml", "$name/Manifest.toml", force = true)
     cd(name)
-    touch("src/build.jl")
+    name::String
+end
+
+function build(et::ExportTemplate{:so} = so)
+    name = build_copy()
     open("src/$name.jl", "a") do io
         write(io, """
+        using $name
         Base.@ccallable function _start()::Cvoid
-            start()
+            $name.start()
         end""")
     end
     touch("Makefile")
@@ -52,8 +57,26 @@ clean:
 	$(RM) *~ *.o *.$(DLEXT)
 	$(RM) -Rf $(TARGET)""")
     end
-    create_library(".", "$(name)build";
-                      lib_name=name,
-            )
+    create_library(".", "$(name)so";
+                      lib_name=name)
 end
+
+function build(et::ExportTemplate{:app})
+    name = build_copy()
+    Pkg.activate(".")
+    Pkg.add("Blink")
+    open("src/$name.jl", "a") do io
+        write(io, """
+        using Blink
+        using $name
+        function julia_main()::Cint
+            $name.start("127.0.0.1", 5576)
+            w = Window()
+            loadurl(w, "http://127.0.0.1:5576")
+            return 0
+        end""")
+    end
+    create_app(".", "$(name)app")
+end
+
 end # module
