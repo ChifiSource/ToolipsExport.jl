@@ -239,6 +239,7 @@ function buildall(ets::Vector{ExportTemplate} = [so, server, app];
     else
         build(et)
     end
+    cd("..")
     @info "$et Successfully built."
     end for et in ets]
 end
