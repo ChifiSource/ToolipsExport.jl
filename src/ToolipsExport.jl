@@ -230,7 +230,7 @@ Builds each export inside of `ets`.
 buildall()
 ```
 """
-function buildall(ets::Vector{ExportTemplate{Any}} = [so, server, app];
+function buildall(ets::Vector{ExportTemplate} = [so, server, app];
     title::String = "toolips app")
     [begin
     @info "Compiling $et..."
