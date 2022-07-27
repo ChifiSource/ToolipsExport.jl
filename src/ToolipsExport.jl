@@ -65,9 +65,8 @@ function build(et::ExportTemplate{:app})
     Pkg.activate(".")
     Pkg.add("Blink")
     current_file::String = read("src/$name.jl", String)
-    lastend = findlast("end", current_file)[1]
-    current_file[lastend] = ""
-    current_file = current_file * """\n
+    lastend::UnitRange{Int64} = findlast("end", current_file)[1]
+    current_file = current_file[1:minimum(current_file) - 1] * """\n
     using Blink
     using $name
     function julia_main()::Cint
