@@ -77,6 +77,8 @@ function build(et::ExportTemplate{:app})
         end""")
     end
     create_app(".", "$(name)app")
+    touch("$(name)app/share/julia/cert.pem")
 end
 
+export build, app, so
 end # module
