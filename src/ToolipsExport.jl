@@ -221,7 +221,7 @@ end
 
 """
 **Toolips Export**
-### buildall(ets::Vector{ExportTemplate{Any}} = [so, server, app]) -> _
+### buildall(ets::Vector{ExportTemplate{Any}} = [so, server, app], title::String) -> _
 ------------------
 Builds each export inside of `ets`.
 #### example
@@ -230,10 +230,15 @@ Builds each export inside of `ets`.
 buildall()
 ```
 """
-function buildall(ets::Vector{ExportTemplate{Any}} = [so, server, app])
+function buildall(ets::Vector{ExportTemplate{Any}} = [so, server, app],
+    title::String = "toolips app")
     [begin
     @info "Compiling $et..."
-    build(et)
+    if et == app
+        build(et, title)
+    else
+        build(et)
+    end
     @info "$et Successfully built."
     end for et in ets]
 end
