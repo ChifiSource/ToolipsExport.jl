@@ -74,9 +74,10 @@ function build(et::ExportTemplate{:app})
         w = Window()
         loadurl(w, "http://127.0.0.1:8003")
         Base.Threads.@spawn while active(w)
-
+            if ~(active(w))
+                return(0)
+            end
         end
-        return 0
     end
 end # - module"""
     open("src/$name.jl", "w") do io
