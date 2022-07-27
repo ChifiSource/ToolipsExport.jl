@@ -73,7 +73,7 @@ function build(et::ExportTemplate{:app})
         $name.start("127.0.0.1", 8003)
         w = Window()
         loadurl(w, "http://127.0.0.1:8003")
-        while 5 == 5
+        Base.Threads.@spawn while active(w)
 
         end
         return 0
