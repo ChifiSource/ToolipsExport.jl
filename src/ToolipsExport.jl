@@ -65,7 +65,7 @@ function build(et::ExportTemplate{:app})
     Pkg.activate(".")
     Pkg.add("Blink")
     current_file::String = read("src/$name.jl", String)
-    lastend::UnitRange{Int64} = findlast("end", current_file)[1]
+    lastend::UnitRange{Int64} = findlast("end", current_file)
     current_file = current_file[1:minimum(current_file) - 1] * """\n
     using Blink
     using $name
