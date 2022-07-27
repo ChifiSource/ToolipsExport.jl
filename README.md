@@ -4,6 +4,7 @@
 This module allows you to compile [toolips](https://github.com/ChifiSource/Toolips.jl) apps into executable files and shared libraries. Future plans are also to port this to ARM64 and mobile. Currently available exports are:
 - **so**: A shared library
 - **app**: An Electron-based application
+- **server**: An executable server
 ## Compiling a shared library (.so)
 ```julia
 Toolips.new_app("ExampleApp")
