@@ -150,16 +150,15 @@ will become the title of the Window.
 build(app)
 ```
 """
-function build(et::ExportTemplate{:app}, title::String = "toolips app")
+function build(et::ExportTemplate{:app})
     name = build_copy()
     Pkg.activate(".")
     Pkg.add("Blink")
  append_src(name, """\n
-    using Blink
+    using Blink: Window, loadurl, active
     function julia_main()::Cint
         start("127.0.0.1", 8003)
         w = Window()
-        title(w, "$title")
         loadurl(w, "http://127.0.0.1:8003")
         while active(w)
 
@@ -230,15 +229,10 @@ Builds each export inside of `ets`.
 buildall()
 ```
 """
-function buildall(ets::Vector{ExportTemplate} = [so, server, app];
-    title::String = "toolips app")
+function buildall(ets::Vector{ExportTemplate} = [so, server, app])
     [begin
     @info "Compiling $et..."
-    if et == app
-        build(et, title)
-    else
-        build(et)
-    end
+    build(et)
     cd("..")
     @info "$et Successfully built."
     end for et in ets]
