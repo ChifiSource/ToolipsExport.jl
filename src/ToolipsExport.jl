@@ -185,10 +185,10 @@ build(so)
 function build(et::ExportTemplate{:server})
     name = build_copy()
     Pkg.activate(".")
- append_src(name, L"""\n
+ append_src(name, """\n
     function julia_main()::Cint
         ws = start()
-        @info "toolips server started at $(ws.host):$(ws.port)"
+        @info "toolips server started at http://" * ws.host * ":" * ws.port
         while true
 
         end
