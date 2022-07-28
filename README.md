@@ -26,9 +26,7 @@ using ToolipsExport
 
 build(app)
 
-# we can change the title of the app by adding a second positional argument.
-
-build(app, "My Title")
+# the title of the window will be the title that we write in toolips.
 ```
 ## Compiling an executable server (elf64/.exe)
 **note:** unfortunately, you will only be able to compile servers for **your current system**. If you would like to compile them for another system, instead compile this to a shared library and distribute this with an executable that uses the shared library.
@@ -49,7 +47,7 @@ cd("ExampleApp")
 
 using ToolipsExport
 
-buildall(title = "My App")
+buildall()
 # build only some:
-buildall([server, app], title = "My App")
+buildall([server, app])
 ```
