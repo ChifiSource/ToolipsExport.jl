@@ -159,7 +159,7 @@ function build(et::ExportTemplate{:app}, title::String = "toolips app")
     function julia_main()::Cint
         start("127.0.0.1", 8003)
         w = Window()
-        title(w, $title)
+        title(w, "$title")
         loadurl(w, "http://127.0.0.1:8003")
         while active(w)
 
