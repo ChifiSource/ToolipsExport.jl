@@ -195,7 +195,7 @@ function build(et::ExportTemplate{:server})
         return(0)
     end
     end # - module""")
-    create_app(".", "$(name)app")
+    create_app(".", "$(name)server")
     touch("$(name)app/share/julia/cert.pem")
 end
 
